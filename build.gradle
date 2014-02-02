@@ -1,0 +1,59 @@
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'checkstyle'
+    apply plugin: 'pmd'
+    apply plugin: 'findbugs'
+    apply plugin: 'codenarc'
+    apply plugin: 'jacoco'
+    apply plugin: 'project-report'
+
+    sourceCompatibility = '1.6'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile files("$rootProject.projectDir/libs/algs4.jar")
+        compile files("$rootProject.projectDir/libs/stdlib.jar")
+        compile "org.codehaus.groovy:groovy-all:2.2.1"
+        testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    }
+
+    task sourceZip(type: Zip) {
+        from sourceSets*.allJava
+        baseName = rootProject.projectDir.name.toLowerCase()
+    }
+
+
+    checkstyle {
+        toolVersion = '5.6'
+        configFile = file("$rootProject.projectDir/config/checkstyle/checkstyle.xml")
+    }
+    pmd {
+        toolVersion = '5.0.5'
+    }
+    findbugs {
+        toolVersion = '2.0.3'
+        excludeFilter = file("$rootProject.projectDir/config/findbugs/excludeFilter.xml")
+    }
+    codenarc {
+        toolVersion = '0.20'
+        configFile = file("$rootProject.projectDir/config/codenarc/codenarc.groovy")
+        maxPriority3Violations = 100
+    }
+    jacocoTestReport {
+        reports {
+            html.destination "${buildDir}/jacocoHtml"
+        }
+    }
+    test {
+        testLogging {
+            exceptionFormat = 'full'
+        }
+    }
+}
+
+
+
