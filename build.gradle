@@ -12,13 +12,19 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url 'http://oss.sonatype.org/content/repositories/snapshots/'
+        }
     }
 
     dependencies {
         compile files("$rootProject.projectDir/libs/algs4.jar")
         compile files("$rootProject.projectDir/libs/stdlib.jar")
-        compile "org.codehaus.groovy:groovy-all:2.2.1"
-        testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+        compile 'org.codehaus.groovy:groovy-all:2.2.1'
+        testCompile 'org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT'
+        testCompile 'org.hamcrest:hamcrest-all:1.3'
+        testCompile 'cglib:cglib-nodep:3.1'
+        testCompile 'org.objenesis:objenesis:2.1'
     }
 
     task sourceZip(type: Zip) {

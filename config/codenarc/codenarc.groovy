@@ -271,7 +271,7 @@ ruleset {
     FieldName
     InterfaceName
     MethodName {
-        regex = '[A-Za-z][\\w\\-\'" ]+[a-z1-9]'
+        regex = '[A-Za-z][\\w\\-\'"# ]+[a-z1-9]'
     }
     ObjectOverrideMisspelledMethodName
     PackageName
