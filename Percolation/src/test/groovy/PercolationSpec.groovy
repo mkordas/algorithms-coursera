@@ -2,6 +2,7 @@ import spock.lang.Specification
 
 import static PercolationGridOpener.State.O
 import static PercolationGridOpener.State.X
+import static org.spockframework.util.Assert.that
 
 @Newify([Percolation])
 class PercolationSpec extends Specification {
@@ -148,6 +149,25 @@ class PercolationSpec extends Specification {
 
         then:
         percolationGrid.isFull 2, 2
+    }
+
+    def "Should not mark site as full when there is no path open from top"() {
+        given:
+        percolationGrid = Percolation 3
+
+        when:
+        percolationGrid.open 1, 1
+        percolationGrid.open 2, 1
+        percolationGrid.open 3, 1
+        percolationGrid.open 3, 3
+
+        then:
+        percolationGrid.percolates()
+        1..3.each { i ->
+            2..3.each { j ->
+                assert !percolationGrid.isFull(i, j)
+            }
+        }
     }
 
     def "Should fail when percolation grid is queried about invalid indices"() {

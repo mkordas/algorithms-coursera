@@ -1,9 +1,10 @@
 public class Percolation {
 
-    private static final int TOPMOST_SITE_INDEX = 0;
+    private static final int VIRTUAL_TOP_SITE_INDEX = 0;
     private final int N;
-    private final int bottommostSiteIndex;
-    private final WeightedQuickUnionUF unionFind;
+    private final int virtualBottomSiteIndex;
+    private final WeightedQuickUnionUF unionFindWithVirtualTopAndBottom;
+    private final WeightedQuickUnionUF unionFindWithVirtualTop;
     private final boolean[][] openedSites;
 
     /**
@@ -14,8 +15,11 @@ public class Percolation {
         if (N < 1) {
             throw new IndexOutOfBoundsException();
         }
-        bottommostSiteIndex = N * N + 1;
-        unionFind = new WeightedQuickUnionUF(bottommostSiteIndex + 1);
+        virtualBottomSiteIndex = N * N + 1;
+        unionFindWithVirtualTopAndBottom =
+                new WeightedQuickUnionUF(virtualBottomSiteIndex + 1);
+        unionFindWithVirtualTop =
+                new WeightedQuickUnionUF(virtualBottomSiteIndex);
         openedSites = new boolean[N][N];
     }
 
@@ -38,10 +42,10 @@ public class Percolation {
                 unionSiteAt(i, j).withSiteAt(i, j + 1);
             }
             if (i == 1) {
-                unionSiteAt(i, j).withTopmostSite();
+                unionSiteAt(i, j).withVirtualTopSite();
             }
             if (i == N) {
-                unionSiteAt(i, j).withBottommostSite();
+                unionSiteAt(i, j).withVirtualBottomSite();
             }
         }
     }
@@ -50,10 +54,37 @@ public class Percolation {
         return new CreateUnionHelper(i, j);
     }
 
-    private int flatIndex(int i, int j) {
-        return (i - 1) * N + j;
+    private class CreateUnionHelper {
+        private final int linearIndex;
+
+        private CreateUnionHelper(int firstI, int firstJ) {
+            linearIndex = linearIndexOf(firstI, firstJ);
+        }
+
+        private void withSiteAt(int secondI, int secondJ) {
+            unionFindWithVirtualTopAndBottom
+                    .union(linearIndex, linearIndexOf(secondI, secondJ));
+            unionFindWithVirtualTop
+                    .union(linearIndex, linearIndexOf(secondI, secondJ));
+        }
+
+        private void withVirtualTopSite() {
+            unionFindWithVirtualTopAndBottom
+                    .union(linearIndex, VIRTUAL_TOP_SITE_INDEX);
+            unionFindWithVirtualTop
+                    .union(linearIndex, VIRTUAL_TOP_SITE_INDEX);
+        }
+
+        private void withVirtualBottomSite() {
+            unionFindWithVirtualTopAndBottom
+                    .union(linearIndex, virtualBottomSiteIndex);
+        }
     }
 
+
+    private int linearIndexOf(int i, int j) {
+        return (i - 1) * N + j;
+    }
 
     /**
      * is site (row i, column j) open?
@@ -67,43 +98,19 @@ public class Percolation {
      */
     public boolean isFull(int i, int j) {
         validate(i, j);
-        return unionFind.connected(0, flatIndex(i, j));
+        return unionFindWithVirtualTop.connected(0, linearIndexOf(i, j));
     }
 
     private void validate(int i, int j) {
         if (i < 1 || i > N || j < 1 || j > N) {
             throw new IndexOutOfBoundsException();
         }
-
     }
 
     /**
      * does the system percolate?
      */
     public boolean percolates() {
-
-        return unionFind.connected(0, N * N + 1);
-    }
-
-    private class CreateUnionHelper {
-        private final int firstI;
-        private final int firstJ;
-
-        private CreateUnionHelper(int firstI, int firstJ) {
-            this.firstI = firstI;
-            this.firstJ = firstJ;
-        }
-
-        private void withSiteAt(int secondI, int secondJ) {
-            unionFind.union(flatIndex(firstI, firstJ), flatIndex(secondI, secondJ));
-        }
-
-        private void withTopmostSite() {
-            unionFind.union(flatIndex(firstI, firstJ), TOPMOST_SITE_INDEX);
-        }
-
-        private void withBottommostSite() {
-            unionFind.union(flatIndex(firstI, firstJ), bottommostSiteIndex);
-        }
+        return unionFindWithVirtualTopAndBottom.connected(0, N * N + 1);
     }
 }
