@@ -116,7 +116,6 @@ ruleset {
     StatelessSingleton
 
     // rulesets/dry.xml
-    DuplicateListLiteral
     DuplicateMapLiteral
 
     // rulesets/enhanced.xml
@@ -163,7 +162,6 @@ ruleset {
     SpaceAfterSwitch
     SpaceAfterWhile
     SpaceAroundClosureArrow
-    SpaceAroundOperator
     SpaceBeforeClosingBrace
     SpaceBeforeOpeningBrace
 
@@ -267,7 +265,9 @@ ruleset {
     ClassName
     ClassNameSameAsFilename
     ConfusingMethodName
-    FactoryMethodName
+    FactoryMethodName {
+        regex = 'build.*'
+    }
     FieldName
     InterfaceName
     MethodName {

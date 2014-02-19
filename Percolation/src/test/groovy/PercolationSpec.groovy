@@ -2,7 +2,6 @@ import spock.lang.Specification
 
 import static PercolationGridOpener.State.O
 import static PercolationGridOpener.State.X
-import static org.spockframework.util.Assert.that
 
 @Newify([Percolation])
 class PercolationSpec extends Specification {
@@ -41,6 +40,18 @@ class PercolationSpec extends Specification {
         percolationGrid = Percolation 1
 
         when:
+        percolationGrid.open 1, 1
+
+        then:
+        percolationGrid.isOpen 1, 1
+    }
+
+    def "Should report open site when site was opened twice"() {
+        given:
+        percolationGrid = Percolation 1
+
+        when:
+        percolationGrid.open 1, 1
         percolationGrid.open 1, 1
 
         then:
