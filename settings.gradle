@@ -1,1 +1,1 @@
-include 'percolation'
+include 'percolation', 'queues', 'collinear'

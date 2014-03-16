@@ -29,7 +29,7 @@ subprojects {
     }
 
     task sourceZip(type: Zip) {
-        from sourceSets*.allJava
+        from sourceSets.main.java
         baseName = projectDir.name.toLowerCase()
     }
 
