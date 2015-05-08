@@ -43,7 +43,7 @@ subprojects {
         excludeFilter = file("$rootProject.projectDir/config/findbugs/excludeFilter.xml")
     }
     codenarc {
-        toolVersion = '0.20'
+        toolVersion = '0.23'
         configFile = file("$rootProject.projectDir/config/codenarc/codenarc.groovy")
         maxPriority3Violations = 100
     }
