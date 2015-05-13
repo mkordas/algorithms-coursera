@@ -108,6 +108,7 @@ ruleset {
     FinalClassWithProtectedMember
     ImplementationAsType
     LocaleSetDefault
+    NestedForLoop
     PrivateFieldCouldBeFinal
     PublicInstanceField
     ReturnsNullInsteadOfEmptyArray
@@ -302,6 +303,7 @@ ruleset {
     MethodCount
     MethodSize
     NestedBlockDepth
+    ParameterCount
 
     // rulesets/unnecessary.xml
     AddEmptyString
